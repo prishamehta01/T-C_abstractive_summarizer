@@ -23,6 +23,7 @@ cd T-C_abstractive_summarizer
 
 ### 2. Set up a virtual environment
 Set up a virtual environment to manage dependencies:
+
 On Windows:
 ```bash
 python -m venv venv
