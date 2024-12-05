@@ -3,94 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>T&C Summarizer</title>
+    <title>Terms and Conditions Summarizer</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 40px;
+            margin: 0;
+            padding: 0;
             background-color: #f4f4f9;
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+            margin-top: 50px;
+            color: #4CAF50;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 30px;
+        }
+        textarea {
+            width: 80%;
+            height: 200px;
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            resize: vertical;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-top: 40px;
+        }
+        pre {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            margin: 0 auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 16px;
+            color: #333;
+        }
+        .bullet-point {
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 10px;
+            color: #333;
         }
         .container {
             width: 80%;
             margin: 0 auto;
-            padding: 20px;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        textarea {
-            width: 100%;
-            height: 150px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            resize: vertical;
-        }
-        button {
-            padding: 10px 20px;
-            background-color: #5cb85c;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #4cae4c;
-        }
-        #summary {
-            margin-top: 20px;
-            padding: 10px;
-            background-color: #e9f7e9;
-            border: 1px solid #c6e7c6;
-            border-radius: 4px;
-        }
-        select {
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>Terms & Conditions Summarizer</h1>
-    <textarea id="tc-text" placeholder="Enter your Terms and Conditions text here..."></textarea><br><br>
-    <label for="summary-length">Select Summary Length:</label>
-    <select id="summary-length">
-        <option value="short">Short Summary</option>
-        <option value="detailed" selected>Detailed Summary</option>
-    </select><br>
-    <button onclick="getSummary()">Summarize</button>
+    <div class="container">
+        <h1>Terms and Conditions Summarizer</h1>
 
-    <div id="summary"></div>
-</div>
+        <form action="/summarize" method="POST">
+            <textarea name="content" rows="10" placeholder="Enter the Terms and Conditions text here...">{{ request.form['content'] if request.form['content'] else '' }}</textarea>
+            <input type="submit" value="Summarize">
+        </form>
 
-<script>
-    async function getSummary() {
-        const tcText = document.getElementById('tc-text').value;
-        const summaryLength = document.getElementById('summary-length').value;
-
-        if (tcText.trim() === "") {
-            alert("Please enter some text to summarize.");
-            return;
-        }
-
-        const response = await fetch('http://127.0.0.1:5000/summarize', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ "tc_text": tcText, "summary_length": summaryLength })
-        });
-
-        const data = await response.json();
-        const summary = data.summary;
-
-        document.getElementById('summary').innerHTML = `<strong>Summary:</strong><p>${summary}</p>`;
-    }
-</script>
+        {% if summary %}
+            <h2>Summary:</h2>
+            <pre>{{ summary }}</pre>
+        {% endif %}
+    </div>
 
 </body>
 </html>
