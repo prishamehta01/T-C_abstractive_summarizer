@@ -44,6 +44,12 @@
             border: 1px solid #c6e7c6;
             border-radius: 4px;
         }
+        select {
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
     </style>
 </head>
 <body>
@@ -51,6 +57,11 @@
 <div class="container">
     <h1>Terms & Conditions Summarizer</h1>
     <textarea id="tc-text" placeholder="Enter your Terms and Conditions text here..."></textarea><br><br>
+    <label for="summary-length">Select Summary Length:</label>
+    <select id="summary-length">
+        <option value="short">Short Summary</option>
+        <option value="detailed" selected>Detailed Summary</option>
+    </select><br>
     <button onclick="getSummary()">Summarize</button>
 
     <div id="summary"></div>
@@ -59,6 +70,7 @@
 <script>
     async function getSummary() {
         const tcText = document.getElementById('tc-text').value;
+        const summaryLength = document.getElementById('summary-length').value;
 
         if (tcText.trim() === "") {
             alert("Please enter some text to summarize.");
@@ -70,7 +82,7 @@
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ "tc_text": tcText })
+            body: JSON.stringify({ "tc_text": tcText, "summary_length": summaryLength })
         });
 
         const data = await response.json();
