@@ -4,7 +4,7 @@ A simple Flask-based web application that uses abstractive summarization techniq
 
 ## 🚀 Features
 - **Abstractive Summarization**: Summarizes complex T&C documents into concise summaries.
-- **File Upload**: Users can upload T&C documents and receive a summary.
+- **Users can upload T&C text and receive a summary.
 ---
 ## 🛠️ Tech Stack
 - **Backend**: Flask (Python web framework)
