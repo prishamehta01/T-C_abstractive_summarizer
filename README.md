@@ -39,7 +39,7 @@ source venv/bin/activate
 ### 3. Install dependencies
 Install the required dependencies:
 ```bash
-pip install flask torch
+pip install -r requirements.txt
 ```
 
 ### 4.Run the application
