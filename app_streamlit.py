@@ -2,7 +2,7 @@ import streamlit as st
 import requests
 
 # URL of your Flask server
-FLASK_URL = 'http://127.0.0.1:5001'
+FLASK_URL = 'http://127.0.0.1:5000'
 
 # Maximum allowed characters (aligned with T5's input token limit)
 MAX_CHAR_LIMIT = 2000  # Approximately aligns with 512 tokens for T5
