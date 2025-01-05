@@ -82,8 +82,8 @@ def verify_token():
         decoded_token = auth.verify_id_token(id_token)
         user_uid = decoded_token['uid']
 
-        # Construct the redirect URL
-        redirect_url = f"http://localhost:8501/?idToken={id_token}"
+        # Constructing the redirect URL
+        redirect_url = f"https://ahhlsifna4km8dwgnfbaap.streamlit.app/?idToken={id_token}"
 
         return jsonify({'redirect_url': redirect_url}), 200
     except Exception as e:
