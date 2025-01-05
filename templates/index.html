@@ -3,220 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>T&C Simplifier - Text Summarization</title>
-    <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js" type="module"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js" type="module"></script>
-    <!-- Include Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Press+Start+2P&display=swap" rel="stylesheet">
-    <!-- Include basic CSS styling -->
+    <title>Terms and Conditions Summarizer</title>
     <style>
-        /* General Reset */
-        * {
+        body {
+            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
+            background-color: #f4f4f9;
+            color: #333;
         }
-
-        /* Body Setup */
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #121212;
-            color: #fff;
+        h1 {
+            text-align: center;
+            margin-top: 50px;
+            color: #4CAF50;
+        }
+        form {
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            height: 100vh;
-            overflow: hidden;
-            text-align: center;
+            margin-top: 30px;
         }
-
-        
-
-        /* Container Style */
-        .container {
-            background-color: #1a1a1a;
-            padding: 40px 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-            width: 100%;
-            max-width: 400px;
-            text-align: center;
+        textarea {
+            width: 80%;
+            height: 200px;
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            resize: vertical;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
-
-        /* Title */
-        h1 {
-            font-size: 32px;
-            color: #fff;
-            margin-bottom: 15px;
-            font-weight: 600;
-        }
-
-        /* Descriptive Text */
-        p {
-            font-size: 18px;
-            color: #ddd;
-            margin-bottom: 30px;
-            font-weight: 400;
-        }
-
-        /* Buttons - Login and Logout */
-        .btn, .logout-btn {
-            background: linear-gradient(145deg, #00ff99, #00cc66);
-            border: 2px solid transparent;
-            color: #121212;
-            padding: 15px 25px;
-            font-size: 18px;
-            font-weight: 600;
-            text-transform: uppercase;
-            border-radius: 8px;
-            cursor: pointer;
-            width: 100%;
-            transition: all 0.3s ease;
-            margin-bottom: 15px;
-        }
-
-        .btn:hover, .logout-btn:hover {
-            background: linear-gradient(145deg, #00cc66, #00ff99);
-            transform: translateY(-5px);
-        }
-
-        .logout-btn {
-            background-color: #ff4c4c;
+        input[type="submit"] {
+            background-color: #4CAF50;
             color: white;
-            border: 2px solid transparent;
-            display: none;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
         }
-
-        /* Footer */
-        .footer {
-            color: #bbb;
-            font-size: 14px;
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
             margin-top: 40px;
         }
-
-        /* Glowing Text for Buttons */
-        .btn, .logout-btn {
-            box-shadow: 0 0 20px rgba(0, 255, 153, 0.8);
+        pre {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            margin: 0 auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 16px;
+            color: #333;
         }
-
-        /* Center Container Flex */
-        .center-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+        .bullet-point {
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
         }
     </style>
 </head>
 <body>
-    
 
-    <!-- Main Container -->
-    <div class="container center-container">
-        <h1>Welcome to T&C Simplifier</h1>
-        <p>Please log in to simplify the Terms and Conditions and get a quick summary.</p>
+    <div class="container">
+        <h1>Terms and Conditions Summarizer</h1>
 
-        <!-- Login Button -->
-        <button id="login-button" class="btn">Login with Google</button>
+        <form action="/summarize" method="POST">
+            <textarea name="content" rows="10" placeholder="Enter the Terms and Conditions text here...">{{ request.form['content'] if request.form['content'] else '' }}</textarea>
+            <input type="submit" value="Summarize">
+        </form>
 
-        <!-- Logout Button (Hidden initially) -->
-        <button id="logout-button" class="logout-btn">Logout</button>
+        {% if summary %}
+            <h2>Summary:</h2>
+            <pre>{{ summary }}</pre>
+        {% endif %}
     </div>
 
-    <div class="footer">
-        <p>&copy; 2024 T&C Simplifier. All rights reserved.</p>
-    </div>
-
-    <script type="module">
-        // Import Firebase SDK modules
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-        import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
-
-        // Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyCM6PPieE37amlf-MMzsXSGIWg00h6wNug",
-            authDomain: "t-csummarization.firebaseapp.com",
-            projectId: "t-csummarization",
-            storageBucket: "t-csummarization.appspot.com",
-            messagingSenderId: "139817004030",
-            appId: "1:139817004030:web:a22de0631b7fbc002caeaf",
-            measurementId: "G-4BQVH9DN53"
-        };
-
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-
-        // Login function
-        async function login() {
-            const provider = new GoogleAuthProvider();
-            try {
-                const result = await signInWithPopup(auth, provider);
-                const user = result.user;
-                const idToken = await user.getIdToken();
-
-                console.log('Received ID Token:', idToken);  // Debug: Print the token
-
-                // Send the idToken to Flask to verify and redirect to Streamlit
-                const response = await fetch('http://127.0.0.1:5000/verify_token', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ idToken })
-                });
-
-                const data = await response.json();
-
-                if (response.ok) {
-                    console.log("Redirecting to Streamlit with token:", idToken); // Debug: Verify the token before redirect
-                    window.location.href = data.redirect_url;
-                } else {
-                    console.error('Error verifying token:', data.error);
-                    alert('Error logging in. Please try again.');
-                }
-            } catch (error) {
-                console.error('Login error:', error);
-                alert('Login failed. Please try again.');
-            }
-        }
-
-        // Logout function
-        function logout() {
-            signOut(auth).then(() => {
-                console.log('User logged out');
-                document.getElementById('login-button').style.display = 'block';
-                document.getElementById('logout-button').style.display = 'none';
-                alert('You have been logged out successfully.');
-            }).catch((error) => {
-                console.error('Error logging out:', error);
-            });
-        }
-
-        // Attach event listeners to buttons
-        document.getElementById('login-button').addEventListener('click', login);
-        document.getElementById('logout-button').addEventListener('click', logout);
-
-        // Monitor authentication state changes
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                user.getIdToken().then((idToken) => {
-                    sessionStorage.setItem("firebaseIdToken", idToken);
-                    console.log('User is logged in with token:', idToken);
-
-                    // Hide login and show logout button
-                    document.getElementById('login-button').style.display = 'none';
-                    document.getElementById('logout-button').style.display = 'block';
-                });
-            } else {
-                console.log('User is not logged in');
-                // Show login button if user is not logged in
-                document.getElementById('login-button').style.display = 'block';
-                document.getElementById('logout-button').style.display = 'none';
-            }
-        });
-    </script>
 </body>
 </html>

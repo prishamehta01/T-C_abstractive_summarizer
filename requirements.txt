@@ -1,8 +1,4 @@
 Flask
-Flask-CORS
-firebase-admin
-requests
 beautifulsoup4
 transformers
-streamlit
 torch
