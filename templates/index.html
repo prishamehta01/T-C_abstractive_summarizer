@@ -160,7 +160,7 @@
                 console.log('Received ID Token:', idToken);  // Debug: Print the token
 
                 // Send the idToken to Flask to verify and redirect to Streamlit
-                const response = await fetch('http://127.0.0.1:5000/verify_token', {
+                const response = await fetch('https://t-c-abstractive-summarizer.onrender.com/verify_token', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
