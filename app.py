@@ -82,8 +82,8 @@ def verify_token():
         decoded_token = auth.verify_id_token(id_token)
         user_uid = decoded_token['uid']
 
-        # Construct the redirect URL
-        redirect_url = f"http://localhost:8501/?idToken={id_token}"
+        # Constructing the redirect URL
+        redirect_url = f"https://ahhlsifna4km8dwgnfbaap.streamlit.app/?idToken={id_token}"
 
         return jsonify({'redirect_url': redirect_url}), 200
     except Exception as e:
@@ -126,4 +126,7 @@ def summarize():
 CORS(app)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    import os
+    port = int(os.environ.get("PORT", 5000))  # Get port from environment or default to 5000
+    app.run(host='0.0.0.0', port=port)
+    
